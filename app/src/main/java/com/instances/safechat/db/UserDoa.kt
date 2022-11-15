@@ -4,8 +4,8 @@ import androidx.room.*
 
 @Dao
 interface UserDoa {
-    @Query("SELECT * FROM userEntity where id = :userId")
-    fun getUser(userId:String): List<UserEntity>
+    @Query("SELECT * FROM userEntity where email = :email")
+    fun getUser(email:String): List<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addUser(user: UserEntity)

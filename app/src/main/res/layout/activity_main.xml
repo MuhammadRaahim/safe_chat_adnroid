@@ -4,4 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SplashActivity"/>
+    tools:context=".activities.SplashActivity">
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="@dimen/_230sdp"
+        android:layout_height="@dimen/_500sdp"
+        android:src="@drawable/img_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

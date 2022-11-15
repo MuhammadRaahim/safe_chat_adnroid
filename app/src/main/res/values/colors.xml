@@ -7,4 +7,11 @@
     <color name="green">#59b948</color>
     <color name="grey_100">#f1f3f4</color>
     <color name="grey">#E1E0E0</color>
+    <color name="border">#59637245</color>
+    <color name="color_left">#F0F0F0</color>
+    <color name="white_100">#FCFBFC</color>
+    <color name="font_light">#464646</color>
+    <color name="red">#FF0000</color>
+    <color name="grey_200">#E5E5E5</color>
+
 </resources>

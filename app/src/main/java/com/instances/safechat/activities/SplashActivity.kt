@@ -1,15 +1,36 @@
 package com.instances.safechat.activities
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import com.instances.safechat.R
+import android.os.Handler
+import android.os.Looper
+import androidx.appcompat.app.AppCompatActivity
+import com.instances.safechat.databinding.ActivityMainBinding
+import com.instances.safechat.utils.Constants.Companion.SPLASH_TIME
 
-@SuppressLint("CustomSplashScreen")
+
+
 class SplashActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.AppTheme)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        checkLoginInfo()
     }
+
+    private fun checkLoginInfo(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        },SPLASH_TIME)
+    }
+
+
+
 }

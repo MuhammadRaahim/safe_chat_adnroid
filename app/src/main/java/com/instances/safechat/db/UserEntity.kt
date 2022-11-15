@@ -1,16 +1,19 @@
 package com.instances.safechat.db
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
 data class UserEntity (
-    @PrimaryKey val id: String,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val userName: String,
     val email: String,
-    val gender: String,
-    val phone: String,
-    val address: String,
-    val profileImage: String?
-        )
+    val chatList: String? = null
+    )
+
+data class Chat(
+    val type: Int,
+    val Message: String
+)
