@@ -12,4 +12,6 @@
     <string name="str_messages">Messages</string>
     <string name="str_logout">Logout</string>
     <string name="str_type_your_message_here">Type message here</string>
+    <string name="str_no_recent_message">No Recent Message</string>
+    <string name="str_clear">Clear</string>
 </resources>

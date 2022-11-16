@@ -8,9 +8,10 @@ import androidx.room.PrimaryKey
 @Entity
 data class UserEntity (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val userName: String,
-    val email: String,
-    val chatList: String? = null
+    var userName: String,
+    var email: String,
+    var password: String,
+    var chatList: String? = null
     )
 
 data class Chat(

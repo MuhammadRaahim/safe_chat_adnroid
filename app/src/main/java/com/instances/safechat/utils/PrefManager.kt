@@ -2,8 +2,7 @@ package com.instances.safechat.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.instances.safechat.utils.Constants
-import com.instances.safechat.utils.Constants.Companion.FCM_TOKEN
+import com.instances.safechat.utils.Constants.Companion.USER_SESSION
 
 class PrefManager( var context: Context) {
     private val pref: SharedPreferences = context.getSharedPreferences(
@@ -12,12 +11,19 @@ class PrefManager( var context: Context) {
     private val editor: SharedPreferences.Editor = pref.edit()
 
 
-    var fcmToken:String
-        get() = pref.getString(FCM_TOKEN, "")!!
+    // it store user encrypted email
+    var session:String
+        get() = pref.getString(USER_SESSION, "")!!
         set(value) {
-            editor.putString(FCM_TOKEN,value)
+            editor.putString(USER_SESSION,value)
             editor.apply()
             editor.commit()
         }
+
+    fun logout(){
+        editor.clear()
+        editor.apply()
+        editor.commit()
+    }
 
 }

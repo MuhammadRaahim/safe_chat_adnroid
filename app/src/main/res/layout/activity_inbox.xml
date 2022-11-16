@@ -40,6 +40,7 @@
             android:layout_height="@dimen/_63sdp"
             android:orientation="horizontal">
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_clear"
                 android:layout_width="@dimen/_45sdp"
                 android:layout_height="match_parent"
                 android:layout_marginVertical="@dimen/_3sdp"
@@ -56,7 +57,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="@dimen/_3sdp"
-                    android:text="Delete"
+                    android:text="@string/str_clear"
                     android:textColor="@color/white" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

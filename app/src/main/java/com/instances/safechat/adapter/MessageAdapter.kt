@@ -16,8 +16,8 @@ import com.instances.safechat.R
 import com.instances.safechat.db.Chat
 
 
-class MessageAdapter(
-//    var messageList: ArrayList<Chat>,
+class  MessageAdapter(
+    var messageList: ArrayList<Chat>,
 ) : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageAdapter.ViewHolder {
@@ -35,7 +35,7 @@ class MessageAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position % 2 == 0) {
+        return if (messageList[position].type == 1) {
             1
         } else {
             0
@@ -43,20 +43,22 @@ class MessageAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-
+        var message = messageList[position]
+        holder.tvMessage.text = message.Message
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return messageList.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateMessage(messageList: ArrayList<Chat>){
+        this.messageList = messageList
+        notifyDataSetChanged()
     }
 
 
-
-
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        var tvMessage: TextView = itemView.findViewById(R.id.tv_message)
-//        var rlTextMessage: RelativeLayout = itemView.findViewById(R.id.rl_text_message)
+        var tvMessage: TextView = itemView.findViewById(R.id.tv_message)
     }
 }

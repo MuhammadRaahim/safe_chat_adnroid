@@ -1,11 +1,20 @@
 package com.instances.safechat.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Dialog
+import android.app.ProgressDialog
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Patterns
 import android.view.View
+import android.view.Window
+import android.view.inputmethod.InputMethodManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.instances.safechat.R
 import com.instances.safechat.db.Chat
 import com.instances.safechat.utils.Constants.Companion.SALTVALUE
 import com.instances.safechat.utils.Constants.Companion.SECRET_KEY
@@ -21,7 +30,6 @@ import javax.crypto.*
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
-import kotlin.collections.ArrayList
 
 class BaseUtils {
 
@@ -118,7 +126,7 @@ class BaseUtils {
         }
 
         // covert chat list into json string
-        fun fromGsonToJson(chatList: ArrayList<Chat?>?): String? {
+        fun fromGsonToJson(chatList: ArrayList<Chat>): String? {
             if (chatList == null) {
                 return null
             }
@@ -136,6 +144,25 @@ class BaseUtils {
             val type =
                 object : TypeToken<ArrayList<Chat?>?>() {}.type
             return gson.fromJson<ArrayList<Chat>>(jsonList, type)
+        }
+
+        fun Activity.hideKeyboard() {
+            hideKeyboard(currentFocus ?: View(this))
+        }
+
+        private fun Context.hideKeyboard(view: View) {
+            val inputMethodManager =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
+        fun setDialogue(context: Context?): Dialog {
+            val dialog = Dialog(context!!)
+            dialog.setCancelable(false)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.loading_dialouge);
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            return dialog
         }
 
 
