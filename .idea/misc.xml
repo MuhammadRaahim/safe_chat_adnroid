@@ -10,6 +10,9 @@
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/drawable-xhdpi/ic_chat_bg.xml" value="0.1535" />
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/drawable-xhdpi/ic_send.xml" value="0.1535" />
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/drawable-xhdpi/profile_picture_bg.xml" value="0.1535" />
+        <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/drawable-xxxhdpi/cardviewbg.xml" value="0.1535" />
+        <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/drawable-xxxhdpi/ic_profile_filled.xml" value="0.1535" />
+        <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/drawable-xxxhdpi/profile_picture_bg.xml" value="0.1535" />
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/layout/activity_chat.xml" value="0.25" />
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/layout/activity_inbox.xml" value="0.18" />
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/layout/activity_login.xml" value="0.25" />
@@ -17,6 +20,7 @@
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/layout/activity_signup.xml" value="0.22" />
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/layout/layout_left_message.xml" value="0.22" />
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/layout/layout_right_message.xml" value="0.25" />
+        <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/layout/layout_select_doc.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/DeLL/Documents/GitHub/safe_chat_android/app/src/main/res/layout/loading_dialouge.xml" value="0.18" />
       </map>
     </option>

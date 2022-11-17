@@ -16,5 +16,6 @@ data class UserEntity (
 
 data class Chat(
     val type: Int,
+    val form: String,
     val Message: String
 )

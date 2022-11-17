@@ -1,9 +1,24 @@
 package com.instances.safechat.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.app.AlertDialog
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
+import com.instances.safechat.R
 import com.instances.safechat.adapter.MessageAdapter
 import com.instances.safechat.databinding.ActivityChatBinding
 import com.instances.safechat.db.Chat
@@ -15,6 +30,8 @@ import com.instances.safechat.utils.BaseUtils.Companion.encrypt
 import com.instances.safechat.utils.BaseUtils.Companion.fromGsonToJson
 import com.instances.safechat.utils.BaseUtils.Companion.hideKeyboard
 import com.instances.safechat.utils.BaseUtils.Companion.jsonToGson
+import com.instances.safechat.utils.Constants.Companion.IMAGE
+import com.instances.safechat.utils.Constants.Companion.MESSAGE
 import com.instances.safechat.utils.PrefManager
 
 class ChatActivity : AppCompatActivity() {
@@ -69,16 +86,119 @@ class ChatActivity : AppCompatActivity() {
                     sendMessage()
                 }
             }
+            ivSelectImage.setOnClickListener {
+                openFileChooseDialog()
+            }
         }
+    }
+
+    private fun openFileChooseDialog() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        val inflater = this.layoutInflater
+        val dialogView: View = inflater.inflate(R.layout.layout_select_doc, null)
+        dialogBuilder.setView(dialogView)
+        val alertDialog = dialogBuilder.create()
+        alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        alertDialog.show()
+
+        val pictureCv = dialogView.findViewById<MaterialButton>(R.id.picture_cv)
+        val videoCvs = dialogView.findViewById<MaterialButton>(R.id.doc_cv)
+
+        pictureCv.setOnClickListener {
+            pickImage()
+            alertDialog.dismiss()
+        }
+    }
+
+    private fun pickImage() {
+       launchGalleryIntent()
+    }
+
+    private fun showSnackBar(
+        view: View, msg: String, length: Int, actionMessage: CharSequence?,
+        action: (View) -> Unit
+    ) {
+        val snackbar = Snackbar.make(view, msg, length)
+        if (actionMessage != null) {
+            snackbar.setAction(actionMessage) {
+                action(this.findViewById(android.R.id.content))
+            }.show()
+        } else {
+            snackbar.show()
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                Log.i("Permission: ", "Granted")
+                getImageFromGallery.launch(arrayOf("image/*"))
+            } else {
+                Log.i("Permission: ", "Denied")
+                Toast.makeText(this,getString(R.string.permission_required)
+                    .plus(". Please enable it settings"), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private fun launchGalleryIntent() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                getImageFromGallery.launch(arrayOf("image/*"))
+            }
+
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) -> {
+                showSnackBar(
+                    binding.root,
+                    getString(R.string.permission_required),
+                    Snackbar.LENGTH_INDEFINITE,
+                    getString(R.string.str_ok)
+                ) {
+                    requestPermissionLauncher.launch(
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    )
+                }
+            }
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            }
+        }
+    }
+
+    private val getImageFromGallery = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        sendPicture(uri)
+    }
+
+    private fun sendPicture(uri: Uri?) {
+        hideKeyboard()
+        binding.tvNoMessage.isVisible = false
+        binding.rvMessages.isVisible = true
+        val message = Chat(type = 1, form = IMAGE,uri.toString())
+        // encrypt the message and send in reply
+        val encryptedReply = Chat(type = 0, form = MESSAGE,encrypt(uri.toString())!!)
+        chatList.add(message)
+        chatList.add(encryptedReply)
+        adapter.updateMessage(chatList)
+        binding.etMessage.setText("")
+        binding.rvMessages.scrollToPosition(chatList.size-1)
     }
 
     private fun sendMessage() {
         hideKeyboard()
         binding.tvNoMessage.isVisible = false
         binding.rvMessages.isVisible = true
-        val message = Chat(type = 1,binding.etMessage.text.toString().trim())
+        val message = Chat(type = 1, form = MESSAGE,binding.etMessage.text.toString().trim())
             // encrypt the message and send in reply
-        val encryptedReply = Chat(type = 0, encrypt(binding.etMessage.text.toString().trim())!!)
+        val encryptedReply = Chat(type = 0, form = MESSAGE,encrypt(binding.etMessage.text.toString().trim())!!)
         chatList.add(message)
         chatList.add(encryptedReply)
         adapter.updateMessage(chatList)

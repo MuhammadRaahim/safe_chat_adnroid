@@ -7,5 +7,8 @@ class Constants {
         const val SPLASH_TIME  = 3000L
         const val SECRET_KEY = "123456789"
         const val SALTVALUE = "abcdefg"
+        const val MESSAGE = "message"
+        const val DOCUMENT = "document"
+        const val IMAGE = "image"
     }
 }

@@ -1,19 +1,20 @@
 package com.instances.safechat.adapter
 
 import android.annotation.SuppressLint
-import android.app.Dialog
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.instances.safechat.R
 import com.instances.safechat.db.Chat
+import com.instances.safechat.utils.Constants.Companion.IMAGE
+import com.instances.safechat.utils.Constants.Companion.MESSAGE
 
 
 class  MessageAdapter(
@@ -43,8 +44,19 @@ class  MessageAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var message = messageList[position]
-        holder.tvMessage.text = message.Message
+        val message = messageList[position]
+        if (message.form == MESSAGE){
+            holder.rlTextMessage.isVisible = true
+            holder.cvImage.isVisible = false
+            holder.cvVideoDetail.isVisible = false
+            holder.tvMessage.text = message.Message
+        }else if (message.form == IMAGE){
+            holder.rlTextMessage.isVisible = false
+            holder.cvImage.isVisible = true
+            holder.cvVideoDetail.isVisible = false
+            holder.ivMessage.setImageURI(Uri.parse(message.Message))
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -60,5 +72,10 @@ class  MessageAdapter(
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvMessage: TextView = itemView.findViewById(R.id.tv_message)
+        var rlTextMessage: RelativeLayout = itemView.findViewById(R.id.rl_text_message)
+        var cvImage: CardView = itemView.findViewById(R.id.cv_image)
+        var cvVideoDetail: CardView = itemView.findViewById(R.id.cv_document)
+        var ivMessage: ImageView = itemView.findViewById(R.id.iv_message)
+        var tvTitle: TextView = itemView.findViewById(R.id.tv_title)
     }
 }
