@@ -89,7 +89,9 @@ class  MessageAdapter(
                 holder.itemView.context,
                 "com.instances.safechat.fileprovider",
                 file) else Uri.fromFile(file),
-                "*/*").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                "*/*")
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            .setClassName("com.android.chrome", "com.google.android.apps.chrome.Main")
         holder.itemView.context.startActivity(intent)
     }
 
