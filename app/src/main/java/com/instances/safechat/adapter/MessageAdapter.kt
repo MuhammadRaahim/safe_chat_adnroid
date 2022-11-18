@@ -3,7 +3,8 @@ package com.instances.safechat.adapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Environment
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,6 +20,7 @@ import com.instances.safechat.R
 import com.instances.safechat.db.Chat
 import com.instances.safechat.utils.Constants.Companion.IMAGE
 import com.instances.safechat.utils.Constants.Companion.MESSAGE
+import java.io.File
 import java.util.*
 
 
@@ -71,18 +73,24 @@ class  MessageAdapter(
         }
 
         holder.cvVideoDetail.setOnClickListener {
-            val path =
-                Environment.getExternalStorageDirectory().toString() + message.Message
-            val uri = Uri.parse(path)
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setDataAndType(uri, "*/*")
-            holder.itemView.context.startActivity(intent)
+            openFile(holder,message.Message)
         }
 
     }
 
     override fun getItemCount(): Int {
         return messageList.size
+    }
+
+    private fun openFile(holder: ViewHolder, path: String){
+        val file = File(path)
+        val intent = Intent(Intent.ACTION_VIEW) //
+            .setDataAndType(if (VERSION.SDK_INT >= VERSION_CODES.N) FileProvider.getUriForFile(
+                holder.itemView.context,
+                "com.instances.safechat.fileprovider",
+                file) else Uri.fromFile(file),
+                "*/*").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        holder.itemView.context.startActivity(intent)
     }
 
     @SuppressLint("NotifyDataSetChanged")
