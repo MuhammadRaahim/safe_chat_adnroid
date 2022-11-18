@@ -1,7 +1,9 @@
 package com.instances.safechat.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +11,15 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.instances.safechat.R
 import com.instances.safechat.db.Chat
 import com.instances.safechat.utils.Constants.Companion.IMAGE
 import com.instances.safechat.utils.Constants.Companion.MESSAGE
+import java.util.*
 
 
 class  MessageAdapter(
@@ -54,7 +59,24 @@ class  MessageAdapter(
             holder.rlTextMessage.isVisible = false
             holder.cvImage.isVisible = true
             holder.cvVideoDetail.isVisible = false
-            holder.ivMessage.setImageURI(Uri.parse(message.Message))
+
+            Glide.with(holder.itemView.context)
+                .load(message.Message)
+                .into(holder.ivMessage)
+        }else{
+            holder.rlTextMessage.isVisible = false
+            holder.cvImage.isVisible = false
+            holder.cvVideoDetail.isVisible = true
+            holder.tvTitle.text = UUID.randomUUID().toString()
+        }
+
+        holder.cvVideoDetail.setOnClickListener {
+            val path =
+                Environment.getExternalStorageDirectory().toString() + message.Message
+            val uri = Uri.parse(path)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(uri, "*/*")
+            holder.itemView.context.startActivity(intent)
         }
 
     }

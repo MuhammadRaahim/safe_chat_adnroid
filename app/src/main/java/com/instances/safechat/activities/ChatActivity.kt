@@ -30,9 +30,11 @@ import com.instances.safechat.utils.BaseUtils.Companion.encrypt
 import com.instances.safechat.utils.BaseUtils.Companion.fromGsonToJson
 import com.instances.safechat.utils.BaseUtils.Companion.hideKeyboard
 import com.instances.safechat.utils.BaseUtils.Companion.jsonToGson
+import com.instances.safechat.utils.Constants.Companion.DOCUMENT
 import com.instances.safechat.utils.Constants.Companion.IMAGE
 import com.instances.safechat.utils.Constants.Companion.MESSAGE
 import com.instances.safechat.utils.PrefManager
+import com.instances.safechat.utils.RealFilePath.Companion.getFilePath
 
 class ChatActivity : AppCompatActivity() {
 
@@ -43,6 +45,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var manager: PrefManager
     private lateinit var userDoa: UserDoa
     private lateinit var user: UserEntity
+    private var check = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,15 +105,22 @@ class ChatActivity : AppCompatActivity() {
         alertDialog.show()
 
         val pictureCv = dialogView.findViewById<MaterialButton>(R.id.picture_cv)
-        val videoCvs = dialogView.findViewById<MaterialButton>(R.id.doc_cv)
+        val documentCV = dialogView.findViewById<MaterialButton>(R.id.doc_cv)
 
         pictureCv.setOnClickListener {
-            pickImage()
+            check = false
+            pickFile()
+            alertDialog.dismiss()
+        }
+
+        documentCV.setOnClickListener {
+            check = true
+            pickFile()
             alertDialog.dismiss()
         }
     }
 
-    private fun pickImage() {
+    private fun pickFile() {
        launchGalleryIntent()
     }
 
@@ -134,7 +144,11 @@ class ChatActivity : AppCompatActivity() {
         ) { isGranted: Boolean ->
             if (isGranted) {
                 Log.i("Permission: ", "Granted")
-                getImageFromGallery.launch(arrayOf("image/*"))
+                if (check){
+                    getFileFromGallery.launch(arrayOf("*/*"))
+                }else {
+                    getImageFromGallery.launch(arrayOf("image/*"))
+                }
             } else {
                 Log.i("Permission: ", "Denied")
                 Toast.makeText(this,getString(R.string.permission_required)
@@ -148,7 +162,11 @@ class ChatActivity : AppCompatActivity() {
                 this,
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED -> {
-                getImageFromGallery.launch(arrayOf("image/*"))
+                if (check){
+                    getFileFromGallery.launch(arrayOf("*/*"))
+                }else {
+                    getImageFromGallery.launch(arrayOf("image/*"))
+                }
             }
 
             ActivityCompat.shouldShowRequestPermissionRationale(
@@ -178,13 +196,33 @@ class ChatActivity : AppCompatActivity() {
         sendPicture(uri)
     }
 
+    private val getFileFromGallery = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        sendFile(uri)
+    }
+
+    private fun sendFile(uri: Uri?) {
+        hideKeyboard()
+        binding.tvNoMessage.isVisible = false
+        binding.rvMessages.isVisible = true
+        val path = getFilePath(uri!!,this)!!
+        val message = Chat(type = 1, form = DOCUMENT,path)
+        // encrypt the message and send in reply
+        val encryptedReply = Chat(type = 0, form = MESSAGE,encrypt(path)!!)
+        chatList.add(message)
+        chatList.add(encryptedReply)
+        adapter.updateMessage(chatList)
+        binding.etMessage.setText("")
+        binding.rvMessages.scrollToPosition(chatList.size-1)
+    }
+
     private fun sendPicture(uri: Uri?) {
         hideKeyboard()
         binding.tvNoMessage.isVisible = false
         binding.rvMessages.isVisible = true
-        val message = Chat(type = 1, form = IMAGE,uri.toString())
+        val path = getFilePath(uri!!,this)!!
+        val message = Chat(type = 1, form = IMAGE,path)
         // encrypt the message and send in reply
-        val encryptedReply = Chat(type = 0, form = MESSAGE,encrypt(uri.toString())!!)
+        val encryptedReply = Chat(type = 0, form = MESSAGE,encrypt(path)!!)
         chatList.add(message)
         chatList.add(encryptedReply)
         adapter.updateMessage(chatList)
