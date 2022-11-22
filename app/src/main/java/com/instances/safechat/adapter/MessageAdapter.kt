@@ -84,7 +84,7 @@ class  MessageAdapter(
 
     private fun openFile(holder: ViewHolder, path: String){
         val file = File(path)
-        val intent = Intent(Intent.ACTION_VIEW) //
+        val intent = Intent(Intent.ACTION_VIEW)
             .setDataAndType(if (VERSION.SDK_INT >= VERSION_CODES.N) FileProvider.getUriForFile(
                 holder.itemView.context,
                 "com.instances.safechat.fileprovider",

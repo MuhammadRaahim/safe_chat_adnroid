@@ -38,6 +38,9 @@ class InboxActivity : AppCompatActivity() {
             cvMessage.setOnClickListener {
                 startActivity(Intent(this@InboxActivity,ChatActivity::class.java))
             }
+            cvMessageDec.setOnClickListener {
+
+            }
             cvClear.setOnClickListener {
                 clearChat()
             }
