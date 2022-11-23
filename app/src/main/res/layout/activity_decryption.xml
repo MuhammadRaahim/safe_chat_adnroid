@@ -63,7 +63,8 @@
         android:layout_above="@+id/cv_message"
         android:layout_below="@id/rl_user_detail"
         android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginTop="0.5dp" />
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="12dp" />
 
     <TextView
         android:id="@+id/tv_no_message"

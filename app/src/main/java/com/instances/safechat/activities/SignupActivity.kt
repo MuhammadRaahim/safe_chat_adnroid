@@ -69,7 +69,9 @@ class SignupActivity : AppCompatActivity() {
             userName = username!!,
             email = email!!,
             password = password!!,
-            chatList = null)
+            chatList = null,
+            decryptionChatList = null
+        )
         // checking user already exist
         val user = userDoa.getUser(email)
 

@@ -39,7 +39,7 @@ class InboxActivity : AppCompatActivity() {
                 startActivity(Intent(this@InboxActivity,ChatActivity::class.java))
             }
             cvMessageDec.setOnClickListener {
-
+                startActivity(Intent(this@InboxActivity,DecryptionActivity::class.java))
             }
             cvClear.setOnClickListener {
                 clearChat()
