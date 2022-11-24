@@ -91,7 +91,8 @@ class  DecryptionMessageAdapter(
                 file) else Uri.fromFile(file),
                 "*/*")
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            .setClassName("com.android.chrome", "com.google.android.apps.chrome.Main")
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .setPackage("com.android.chrome")
         holder.itemView.context.startActivity(intent)
     }
 
